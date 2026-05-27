@@ -1,0 +1,38 @@
+#include <stdio.h>
+
+int max(int a, int b) { return ((a > b) ? a : b); }
+
+int knapsack(int n, int m, int p[], int w[]) {
+    int i, j;
+    int k[n + 1][m + 1];
+
+    for (i = 0; i <= n; i++) k[i][0] = 0;
+    for (j = 0; j <= m; j++) k[0][j] = 0;
+
+    for (i = 1; i <= n; i++) {
+        for (j = 1; j <= m; j++) {
+            if (w[i] <= j) {
+                k[i][j] = max(k[i - 1][j], p[i] + k[i - 1][j - w[i]]);
+            } else {
+                k[i][j] = k[i - 1][j];
+            }
+        }
+    }
+
+    printf("The table is :\n");
+    for (i = 0; i <= n; i++) {
+        for (j = 0; j <= m; j++) {
+            printf("%d\t", k[i][j]);
+        }
+        printf("\n");
+    }
+    return k[n][m];
+}
+
+void main() {
+    int n = 3, m = 6;
+    int w[4] = {0, 1, 2, 4};
+    int p[4] = {0, 5, 6, 2};
+    int profit = knapsack(n, m, p, w);
+    printf("The highest profit is: %d\n", profit);
+}
